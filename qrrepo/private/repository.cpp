@@ -365,7 +365,7 @@ void Repository::removeTemporaryRemovedLinks(const Id &id)
 
 void Repository::loadFromDisk()
 {
-	mSerializer.loadFromDisk(mObjects, mMetaInfo);
+	mSerializer.loadFromDisk(mObjects, mMetaInfo, mFiles);
 	addChildrenToRootObject();
 }
 
@@ -431,7 +431,7 @@ bool Repository::exist(const Id &id) const
 
 bool Repository::saveAll() const
 {
-	return mSerializer.saveToDisk(mObjects.values(), mMetaInfo);
+	return mSerializer.saveToDisk(mObjects.values(), mMetaInfo, mFiles);
 }
 
 bool Repository::save(const IdList &list) const
@@ -441,7 +441,7 @@ bool Repository::save(const IdList &list) const
 		toSave.append(allChildrenOf(id));
 	}
 
-	return mSerializer.saveToDisk(toSave, mMetaInfo);
+	return mSerializer.saveToDisk(toSave, mMetaInfo, mFiles);
 }
 
 bool Repository::saveWithLogicalId(const qReal::IdList &list) const
@@ -452,7 +452,7 @@ bool Repository::saveWithLogicalId(const qReal::IdList &list) const
 	}
 
 
-	return mSerializer.saveToDisk(toSave, mMetaInfo);
+	return mSerializer.saveToDisk(toSave, mMetaInfo, mFiles);
 }
 
 bool Repository::saveDiagramsById(QHash<QString, IdList> const &diagramIds)
@@ -530,7 +530,7 @@ bool Repository::exterminate()
 {
 	printDebug();
 	//serializer.clearWorkingDir();
-	bool result = !mWorkingFile.isEmpty() && mSerializer.saveToDisk({}, mMetaInfo);
+	bool result = !mWorkingFile.isEmpty() && mSerializer.saveToDisk({}, mMetaInfo, mFiles);
 	init();
 	printDebug();
 
@@ -628,4 +628,9 @@ QVariant Repository::metaInformation(const QString &key) const
 void Repository::setMetaInformation(const QString &key, const QVariant &info)
 {
 	mMetaInfo[key] = info;
+}
+
+QHash<QString, QVariant> & Repository::files()
+{
+	return mFiles;
 }

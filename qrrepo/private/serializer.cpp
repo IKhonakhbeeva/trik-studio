@@ -22,6 +22,7 @@
 #include <qrkernel/platformInfo.h>
 #include <qrkernel/exception/exception.h>
 #include <qrutils/outFile.h>
+#include <qrutils/inFile.h>
 #include <qrutils/xmlUtils.h>
 #include <qrutils/fileSystemUtils.h>
 
@@ -75,7 +76,7 @@ void Serializer::setWorkingFile(const QString &workingFile)
 	mWorkingFile = workingFile;
 }
 
-bool Serializer::saveToDisk(QList<Object *> const &objects, QHash<QString, QVariant> const &metaInfo) const
+bool Serializer::saveToDisk(QList<Object *> const &objects, QHash<QString, QVariant> const &metaInfo, QHash<QString, QVariant> const &files) const
 {
 	Q_ASSERT_X(!mWorkingFile.isEmpty()
 		, "Serializer::saveToDisk(...)"
@@ -94,6 +95,7 @@ bool Serializer::saveToDisk(QList<Object *> const &objects, QHash<QString, QVari
 	}
 
 	saveMetaInfo(metaInfo);
+	saveFiles(files);
 
 	const QFileInfo fileInfo(mWorkingFile);
 	const QString fileName = fileInfo.completeBaseName();
@@ -123,18 +125,18 @@ bool Serializer::saveToDisk(QList<Object *> const &objects, QHash<QString, QVari
 	return true;
 }
 
-void Serializer::loadFromDisk(QHash<qReal::Id, Object*> &objectsHash, QHash<QString, QVariant> &metaInfo)
+void Serializer::loadFromDisk(QHash<qReal::Id, Object*> &objectsHash, QHash<QString, QVariant> &metaInfo, QHash<QString, QVariant> &files)
 {
 	clearWorkingDir();
 	if (QFileInfo::exists(mWorkingFile)) {
 		decompressFile(mWorkingFile);
 	}
 
-	loadFromDisk(mWorkingDir, objectsHash);
-	loadMetaInfo(metaInfo);
+	loadTreeFromDisk(mWorkingDir, objectsHash);
+	loadMetaInfoAndFiles(metaInfo, files);
 }
 
-void Serializer::loadFromDisk(const QString &currentPath, QHash<qReal::Id, Object*> &objectsHash)
+void Serializer::loadTreeFromDisk(const QString &currentPath, QHash<qReal::Id, Object*> &objectsHash)
 {
 	QDir dir(currentPath + "/tree");
 	if (dir.cd("logical")) {
@@ -185,22 +187,42 @@ void Serializer::saveMetaInfo(QHash<QString, QVariant> const &metaInfo) const
 	out() << document.toString(4);
 }
 
-void Serializer::loadMetaInfo(QHash<QString, QVariant> &metaInfo) const
+void Serializer::saveFiles(QHash<QString, QVariant> const &files) const
+{
+	for (const QString &file : files.keys()) {
+		OutFile out(mWorkingDir + "/" + file);
+		out() << files[file].toString();
+	}
+}
+
+void Serializer::loadMetaInfoAndFiles(QHash<QString, QVariant> &metaInfo, QHash<QString, QVariant> &files) const
 {
 	metaInfo.clear();
+	files.clear();
 
-	const QString filePath = mWorkingDir + "/metaInfo.xml";
-	if (!QFile::exists(filePath)) {
-		return;
-	}
-
-	const QDomDocument document = xmlUtils::loadDocument(filePath);
-	for (QDomElement child = document.documentElement().firstChildElement("info")
-			; !child.isNull()
-			; child = child.nextSiblingElement("info"))
-	{
-		metaInfo[child.attribute("key")] = ValuesSerializer::deserializeQVariant(
-				child.attribute("type"), child.attribute("value"));
+	QDir workDir(mWorkingDir);
+	for (auto &&file : workDir.entryList(QDir::Files)) {
+		qDebug() << "Load file " << file;
+		if (file == "metaInfo.xml") {
+			const QDomDocument document = xmlUtils::loadDocument(mWorkingDir + "/" + file);
+			for (QDomElement child = document.documentElement().firstChildElement("info")
+					; !child.isNull()
+					; child = child.nextSiblingElement("info"))
+			{
+				const auto key = child.attribute("key");
+				const auto value = ValuesSerializer::deserializeQVariant(
+						child.attribute("type"), child.attribute("value"));
+				if (key == "worldModel") {
+					files["worldModel.xml"] = value;
+				} else if (key == "blobs") {
+					files["blobs.xml"] = value;
+				} else {
+					metaInfo[key] = value;
+				}
+			}
+		} else {
+			files[file] = InFile::readAll(mWorkingDir + "/" + file);
+		}
 	}
 }
 

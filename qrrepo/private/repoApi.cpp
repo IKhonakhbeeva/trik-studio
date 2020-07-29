@@ -639,3 +639,8 @@ void RepoApi::setMetaInformation(const QString &key, const QVariant &info)
 {
 	mRepository->setMetaInformation(key, info);
 }
+
+QHash<QString, QVariant> &RepoApi::files() const
+{
+	mRepository->files();
+}

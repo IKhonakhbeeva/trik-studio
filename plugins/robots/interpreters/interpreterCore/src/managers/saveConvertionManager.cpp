@@ -183,7 +183,7 @@ ProjectConverter SaveConvertionManager::from302to310Converter()
 							}
 						}
 
-						logicalApi.mutableLogicalRepoApi().setMetaInformation("worldModel", worldModel);
+						logicalApi.mutableLogicalRepoApi().files()["worldModel.xml"] = worldModel;
 						return true;
 					}
 
@@ -221,12 +221,12 @@ ProjectConverter SaveConvertionManager::from320to330Converter()
 	return ProjectConverter(editor(), Version::fromString("3.2.0"), Version::fromString("3.3.0")
 			, [=](GraphicalModelAssistInterface &, LogicalModelAssistInterface &logicalApi)
 	{
-		QString worldModel = logicalApi.logicalRepoApi().metaInformation("worldModel").toString();
+		QString worldModel = logicalApi.logicalRepoApi().files().value("worldModel.xml").toString();
 		if (!worldModel.contains("trikV62KitRobot")) {
 			return ProjectConverter::NoModificationsMade;
 		}
 		worldModel.replace("trikV62KitRobot", "trikKitRobot");
-		logicalApi.mutableLogicalRepoApi().setMetaInformation("worldModel", worldModel);
+		logicalApi.mutableLogicalRepoApi().files()["worldModel.xml"] = worldModel;
 		return ProjectConverter::Success;
 	});
 }
@@ -236,7 +236,7 @@ ProjectConverter SaveConvertionManager::from330to20204Converter()
 	return ProjectConverter(editor(), Version::fromString("3.3.0"), Version::fromString("2020.4")
 			, [=](GraphicalModelAssistInterface &, LogicalModelAssistInterface &logicalApi)
 	{
-		QString worldModel = logicalApi.logicalRepoApi().metaInformation("worldModel").toString();
+		QString worldModel = logicalApi.logicalRepoApi().files().value("worldModel.xml").toString();
 		if (!worldModel.contains("trik::robotModel::parts::TrikLineSensor")
 				&& !worldModel.contains("value=\"trik::robotModel::twoD::parts::TwoDInfraredSensor")) {
 			return ProjectConverter::NoModificationsMade;
@@ -250,7 +250,7 @@ ProjectConverter SaveConvertionManager::from330to20204Converter()
 
 		worldModel.replace("TrikLineSensor", "TrikVideoCamera");
 
-		logicalApi.mutableLogicalRepoApi().setMetaInformation("worldModel", worldModel);
+		logicalApi.mutableLogicalRepoApi().files()["worldModel.xml"] = worldModel;
 		return ProjectConverter::Success;
 	});
 }

@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 		/// Explicitly convert to QString
 		const QString &fieldContents = fieldFile.readAll();
 
-		repo.setMetaInformation("worldModel", fieldContents);
+		repo.files()["worldModel.xml"] = fieldContents;
 	}
 
 

@@ -43,18 +43,19 @@ public:
 	void removeFromDisk(const qReal::Id &id) const;
 
 	/// Returns true if saving was successfull.
-	bool saveToDisk(QList<Object *> const &objects, QHash<QString, QVariant> const &metaInfo) const;
-	void loadFromDisk(QHash<qReal::Id, Object *> &objectsHash, QHash<QString, QVariant> &metaInfo);
+	bool saveToDisk(QList<Object *> const &objects, QHash<QString, QVariant> const &metaInfo, QHash<QString, QVariant> const &files) const;
+	void loadFromDisk(QHash<qReal::Id, Object *> &objectsHash, QHash<QString, QVariant> &metaInfo, QHash<QString, QVariant> &files);
 
 	/// Decompresses given file into working directory.
 	void decompressFile(const QString &fileName);
 
 private:
-	void loadFromDisk(const QString &currentPath, QHash<qReal::Id, Object *> &objectsHash);
+	void loadTreeFromDisk(const QString &currentPath, QHash<qReal::Id, Object *> &objectsHash);
 	void loadModel(const QDir &dir, QHash<qReal::Id, Object *> &objectsHash);
 
 	void saveMetaInfo(const QHash<QString, QVariant> &metaInfo) const;
-	void loadMetaInfo(QHash<QString, QVariant> &metaInfo) const;
+	void saveFiles(QHash<QString, QVariant> const &files) const;
+	void loadMetaInfoAndFiles(QHash<QString, QVariant> &metaInfo, QHash<QString, QVariant> &files) const;
 
 	QString pathToElement(const qReal::Id &id) const;
 	QString createDirectory(const qReal::Id &id, bool logical) const;

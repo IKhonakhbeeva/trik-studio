@@ -153,6 +153,7 @@ void SubprogramsImporterExporterPlugin::importToProject() const
 	for (const auto &metaKey : mLogicalModel->logicalRepoApi().metaInformationKeys()) {
 		oldMeta[metaKey] = mLogicalModel->logicalRepoApi().metaInformation(metaKey);
 	}
+	QHash<QString, QVariant> oldFiles(mLogicalModel->logicalRepoApi().files());
 	mRepo->importFromDisk(fileName);
 	mMainWindowInterpretersInterface->reinitModels();
 	for (const auto &diagram : openedDiagrams) {
@@ -161,6 +162,8 @@ void SubprogramsImporterExporterPlugin::importToProject() const
 	for (const auto &metaKey : oldMeta.keys()) {
 		mLogicalModel->mutableLogicalRepoApi().setMetaInformation(metaKey, oldMeta[metaKey]);
 	}
+	mLogicalModel->mutableLogicalRepoApi().files().clear();
+	mLogicalModel->mutableLogicalRepoApi().files() = oldFiles;
 	mProjectManager->afterOpen(mRepo->workingFile());
 	mProjectManager->setUnsavedIndicator(true);
 
@@ -254,6 +257,7 @@ void SubprogramsImporterExporterPlugin::importFromCollectionTriggered() const
 	for (auto const &metaKey : mLogicalModel->logicalRepoApi().metaInformationKeys()) {
 		oldMeta[metaKey] = mLogicalModel->logicalRepoApi().metaInformation(metaKey);
 	}
+	QHash<QString, QVariant> oldFiles(mLogicalModel->logicalRepoApi().files());
 	if (dialog.result() == QDialog::Accepted) {
 		const auto &openedDiagrams = mMainWindowInterpretersInterface->openedDiagrams();
 		const QString directoryPath = PROGRAM_DIRECTORY + QDir::separator() + SUBPROGRAMS_COLLECTION_DIRECTORY
@@ -272,6 +276,8 @@ void SubprogramsImporterExporterPlugin::importFromCollectionTriggered() const
 		for (const auto &metaKey : oldMeta.keys()) {
 			mLogicalModel->mutableLogicalRepoApi().setMetaInformation(metaKey, oldMeta[metaKey]);
 		}
+		mLogicalModel->mutableLogicalRepoApi().files().clear();
+		mLogicalModel->mutableLogicalRepoApi().files() = oldFiles;
 		mProjectManager->afterOpen(mRepo->workingFile());
 		mProjectManager->setUnsavedIndicator(true);
 

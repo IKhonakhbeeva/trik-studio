@@ -63,7 +63,7 @@ void TwoDModelEngineFacade::init(const kitBase::EventsForKitPluginInterface &eve
 	const auto reloadWorld = [this, &logicalModel, &interpretersInterface, &projectManager]() {
 		QLOG_DEBUG() << "Reloading 2D world model...";
 		const QString xml = projectManager.somethingOpened()
-								? logicalModel.logicalRepoApi().metaInformation("worldModel").toString()
+								? logicalModel.logicalRepoApi().files().value("worldModel.xml").toString()
 								: QString();
 		QDomDocument worldModel;
 		QString errorMessage;
@@ -74,7 +74,7 @@ void TwoDModelEngineFacade::init(const kitBase::EventsForKitPluginInterface &eve
 		}
 
 		const QString blobsXml = projectManager.somethingOpened()
-									 ? logicalModel.logicalRepoApi().metaInformation("blobs").toString()
+									 ? logicalModel.logicalRepoApi().files().value("blobs.xml").toString()
 									 : QString();
 		QDomDocument blobs;
 		if (!blobsXml.isEmpty() && !blobs.setContent(blobsXml, &errorMessage, &errorLine, &errorColumn)) {
@@ -143,11 +143,11 @@ void TwoDModelEngineFacade::init(const kitBase::EventsForKitPluginInterface &eve
 	connect(&systemEvents, &qReal::SystemEvents::activeTabChanged, this, onActiveTabChanged);
 
 	connect(mModel.data(), &model::Model::modelChanged, this, [&logicalModel](const QDomDocument &xml) {
-		logicalModel.mutableLogicalRepoApi().setMetaInformation("worldModel", xml.toString(4));
+		logicalModel.mutableLogicalRepoApi().files()["worldModel.xml"] = xml.toString(4);
 	});
 
 	connect(mModel.data(), &model::Model::blobsChanged, this, [&logicalModel](const QDomDocument &xml) {
-		logicalModel.mutableLogicalRepoApi().setMetaInformation("blobs", xml.toString(4));
+		logicalModel.mutableLogicalRepoApi().files()["blobs.xml"] = xml.toString(4);
 	});
 
 	connect(&eventsForKitPlugin,

@@ -152,6 +152,11 @@ public:
 	/// Stores the meta-information for current stored binded to the given key.
 	void setMetaInformation(const QString &key, const QVariant &info);
 
+	// IKHON TODO description
+	QHash<QString, QVariant> &files();
+//	void setFileContent(const QString &fileName, const QVariant &content);
+//	QVariant fileContent(const QVariant &fileName) const;
+
 private:
 	void init();
 
@@ -164,6 +169,7 @@ private:
 
 	QHash<qReal::Id, Object *> mObjects;
 	QHash<QString, QVariant> mMetaInfo;
+	QHash<QString, QVariant> mFiles;
 
 	/// Name of the current save file for project.
 	QString mWorkingFile;
