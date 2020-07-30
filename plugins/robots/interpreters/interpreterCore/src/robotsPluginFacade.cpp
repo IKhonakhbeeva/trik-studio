@@ -131,8 +131,6 @@ void RobotsPluginFacade::init(const qReal::PluginConfigurator &configurer)
 	};
 	connectDisconnection(mRobotModelManager.model());
 	connect(&mRobotModelManager, &RobotModelManager::robotModelChanged, &mProxyInterpreter, connectDisconnection);
-	connect(&mRobotModelManager, &RobotModelManager::robotModelChanged
-			, &mProxyInterpreter, &kitBase::InterpreterInterface::userStopRobot);
 
 	initKitPlugins(configurer);
 
