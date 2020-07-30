@@ -238,7 +238,7 @@ void Box2DPhysicsEngine::recalculateParameters(qreal timeInterval)
 	const int velocityIterations = 10;
 	const int positionIterations = 6;
 
-	model::RobotModel * const robot = mRobots.first();
+	for (const auto robot : mRobots) {
 	if (mBox2DRobots[robot]) {
 		b2Body *rBody = mBox2DRobots[robot]->getBody();
 		float secondsInterval = timeInterval / 1000.0f;
@@ -335,6 +335,7 @@ void Box2DPhysicsEngine::recalculateParameters(qreal timeInterval)
 		mScene->update();
 
 #endif
+	}
 	}
 }
 

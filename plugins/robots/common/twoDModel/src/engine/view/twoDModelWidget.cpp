@@ -155,10 +155,9 @@ TwoDModelWidget::TwoDModelWidget(Model &model, QWidget *parent)
 	mUi->robotMassInGr->setValue(robotMass);
 	mUi->robotMassInGr->setButtonSymbols(QAbstractSpinBox::NoButtons);
 
-	mConnections << connect(&mModel, &model::Model::robotAdded, [this](){
-		auto robotModels = mModel.robotModels();
-		auto robotTrack = robotModels.isEmpty() || robotModels[0]->info().wheelsPosition().size() < 2 ? robotWidth
-				: qAbs(robotModels[0]->info().wheelsPosition()[0].y() - robotModels[0]->info().wheelsPosition()[1].y());
+	mConnections << connect(&mModel, &model::Model::robotAdded, [this](RobotModel *robotModel){
+		auto robotTrack = robotModel == nullptr || robotModel->info().wheelsPosition().size() < 2 ? robotWidth
+				: qAbs(robotModel->info().wheelsPosition()[0].y() - robotModel->info().wheelsPosition()[1].y());
 		mUi->robotTrackInCm->setValue(robotTrack / pixelsInCm);
 	});
 	mUi->robotTrackInCm->setValue(robotWidth / pixelsInCm);
@@ -176,6 +175,12 @@ TwoDModelWidget::~TwoDModelWidget()
 	delete mDisplay;
 	delete mUi;
 }
+
+void TwoDModelWidget::setRobotModel(twoDModel::model::RobotModel * robot)
+{
+	mCurrentRobot = robot;
+}
+
 
 void TwoDModelWidget::initWidget()
 {
@@ -640,7 +645,7 @@ engine::TwoDModelDisplayWidget *TwoDModelWidget::display()
 
 void TwoDModelWidget::setSensorVisible(const kitBase::robotModel::PortInfo &port, bool isVisible)
 {
-	RobotModel *robotModel = mModel.robotModels()[0];
+	RobotModel *robotModel = mCurrentRobot;
 
 	if (mScene->robot(*robotModel)->sensors()[port]) {
 		mScene->robot(*robotModel)->sensors()[port]->setVisible(isVisible);
@@ -661,7 +666,7 @@ void TwoDModelWidget::focusInEvent(QFocusEvent *event)
 
 SensorItem *TwoDModelWidget::sensorItem(const kitBase::robotModel::PortInfo &port)
 {
-	return mScene->robot(*mModel.robotModels()[0])->sensors().value(port);
+	return mScene->robot(*mCurrentRobot)->sensors().value(port);
 }
 
 void TwoDModelWidget::saveWorldModelToRepo()

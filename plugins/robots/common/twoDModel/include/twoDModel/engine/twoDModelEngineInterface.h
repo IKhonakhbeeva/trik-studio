@@ -18,6 +18,7 @@
 
 #include <utils/timelineInterface.h>
 #include <kitBase/robotModel/portInfo.h>
+#include "twoDModel/engine/model/robotModel.h"
 
 namespace twoDModel {
 namespace engine {
@@ -99,6 +100,7 @@ public:
 	// TODO: remove hack with video port name
 	virtual kitBase::robotModel::PortInfo videoPort() const = 0;
 
+	virtual void setRobotModel(twoDModel::model::RobotModel * robot) = 0;
 };
 
 }

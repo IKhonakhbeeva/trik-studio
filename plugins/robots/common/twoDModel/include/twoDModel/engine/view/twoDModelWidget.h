@@ -107,6 +107,8 @@ public:
 	QDomDocument generateWorldModelXml() const;
 	QDomDocument generateBlobsXml() const;
 
+	void setRobotModel(twoDModel::model::RobotModel * robot);
+
 public slots:
 	void zoomIn() override;
 	void zoomOut() override;
@@ -239,6 +241,7 @@ private:
 	ImageItemPopup *mImageItemPopup {};  // Takes ownership
 	RobotItemPopup *mRobotItemPopup {};  // Takes ownership
 	SpeedPopup *mSpeedPopup {};  // Takes owneship
+	twoDModel::model::RobotModel * mCurrentRobot;
 
 	RobotItem *mSelectedRobotItem {};
 	kitBase::DevicesConfigurationWidget *mCurrentConfigurer {};
