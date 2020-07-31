@@ -17,9 +17,11 @@
 #include <QtCore/QScopedPointer>
 #include <QtCore/QSharedPointer>
 
+#include <twoDModel/kitTwoDPluginInterface.h>
 #include <kitBase/kitPluginInterface.h>
 #include <twoDModel/robotModel/twoDRobotModel.h>
 #include <twoDModel/engine/twoDModelControlInterface.h>
+#include <twoDModel/engine/twoDModelEngineFacade.h>
 
 #include <trikKit/blocks/trikBlocksFactoryBase.h>
 #include <trikKit/robotModel/trikRobotModelBase.h>
@@ -37,9 +39,11 @@
 namespace trik {
 
 class ROBOTS_TRIK_KIT_INTERPRETER_COMMON_EXPORT TrikKitInterpreterPluginBase
-		: public QObject, public kitBase::KitPluginInterface, /*for now*/ public kitBase::DevicesConfigurationProvider
+		: public QObject, public kitBase::KitPluginInterface, public twoDModel::KitTwoDPluginInterface
+		, /*for now*/ public kitBase::DevicesConfigurationProvider
 {
 	Q_OBJECT
+	Q_INTERFACES(twoDModel::KitTwoDPluginInterface)
 	Q_INTERFACES(kitBase::KitPluginInterface)
 
 public:
@@ -48,6 +52,8 @@ public:
 
 	void init(const kitBase::KitPluginConfigurator &configurer) override;
 	void release() override;
+
+	void setTwoDModelEngineFacade(twoDModel::engine::TwoDModelEngineFacade * modelEngine) override;
 
 	QList<kitBase::robotModel::RobotModelInterface *> robotModels() override;
 

@@ -16,7 +16,6 @@
 
 #include <QtWidgets/QApplication>
 
-#include <twoDModel/engine/twoDModelEngineFacade.h>
 #include <utils/widgets/comPortPicker.h>
 
 using namespace ev3;
@@ -33,10 +32,7 @@ Ev3KitInterpreterPlugin::Ev3KitInterpreterPlugin()
 {
 	mAdditionalPreferences = new Ev3AdditionalPreferences;
 
-	auto modelEngine = new twoDModel::engine::TwoDModelEngineFacade(mTwoDRobotModel);
-
-	mTwoDRobotModel.setEngine(modelEngine->engine());
-	mTwoDModel.reset(modelEngine);
+	setTwoDModelEngineFacade(new twoDModel::engine::TwoDModelEngineFacade(mTwoDRobotModel));
 
 	connect(mAdditionalPreferences, &Ev3AdditionalPreferences::settingsChanged
 			, &mUsbRealRobotModel, &robotModel::real::RealRobotModel::rereadSettings);
@@ -55,6 +51,12 @@ Ev3KitInterpreterPlugin::~Ev3KitInterpreterPlugin()
 	if (mOwnsBlocksFactory) {
 		delete mBlocksFactory;
 	}
+}
+
+void Ev3KitInterpreterPlugin::setTwoDModelEngineFacade(twoDModel::engine::TwoDModelEngineFacade * modelEngine)
+{
+	mTwoDRobotModel.setEngine(modelEngine->engine());
+	mTwoDModel.reset(modelEngine);
 }
 
 void Ev3KitInterpreterPlugin::init(const kitBase::KitPluginConfigurator &configurator)

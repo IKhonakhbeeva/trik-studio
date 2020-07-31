@@ -21,7 +21,6 @@ namespace trik {
 class TrikV62KitInterpreterPlugin : public TrikKitInterpreterPluginBase
 {
 	Q_OBJECT
-	Q_INTERFACES(kitBase::KitPluginInterface)
 	Q_PLUGIN_METADATA(IID "trik.TrikV62KitInterpreterPlugin")
 
 public:

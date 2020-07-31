@@ -21,7 +21,6 @@
 #include <QProcessEnvironment>
 #include <QFileInfo>
 
-#include <twoDModel/engine/twoDModelEngineFacade.h>
 #include <qrkernel/settingsManager.h>
 #include <qrkernel/settingsListener.h>
 #include <qrkernel/platformInfo.h>
@@ -55,10 +54,7 @@ void TrikKitInterpreterPluginBase::initKitInterpreterPluginBase
 	mTwoDRobotModel.reset(twoDRobotModel);
 	mBlocksFactory = blocksFactory;
 
-	const auto modelEngine = new twoDModel::engine::TwoDModelEngineFacade(*mTwoDRobotModel);
-
-	mTwoDRobotModel->setEngine(modelEngine->engine());
-	mTwoDModel.reset(modelEngine);
+	setTwoDModelEngineFacade(new twoDModel::engine::TwoDModelEngineFacade(*mTwoDRobotModel));
 
 	connectDevicesConfigurationProvider(devicesConfigurationProvider()); // ... =(
 
@@ -92,6 +88,12 @@ void TrikKitInterpreterPluginBase::initKitInterpreterPluginBase
 		}
 	}
 	mTextualInterpreter.reset(new TrikTextualInterpreter(mTwoDRobotModel, enablePython));
+}
+
+void TrikKitInterpreterPluginBase::setTwoDModelEngineFacade(twoDModel::engine::TwoDModelEngineFacade * modelEngine)
+{
+	mTwoDRobotModel->setEngine(modelEngine->engine());
+	mTwoDModel.reset(modelEngine);
 }
 
 void TrikKitInterpreterPluginBase::startCodeInterpretation(const QString &code, const QString &extension)

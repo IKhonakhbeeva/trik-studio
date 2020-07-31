@@ -69,7 +69,7 @@ public slots:
 private:
 	void loadReadOnlyFlags(const qReal::LogicalModelAssistInterface &logicalModel);
 
-	const QString mRobotModelName;
+	const QString mCurrentRobotModelName;
 
 	QScopedPointer<model::Model> mModel;
 	QScopedPointer<view::TwoDModelWidget> mView;

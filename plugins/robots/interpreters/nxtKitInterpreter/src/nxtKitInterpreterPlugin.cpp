@@ -16,7 +16,6 @@
 
 #include <QtWidgets/QApplication>
 
-#include <twoDModel/engine/twoDModelEngineFacade.h>
 #include <utils/widgets/comPortPicker.h>
 
 using namespace nxt;
@@ -33,10 +32,7 @@ NxtKitInterpreterPlugin::NxtKitInterpreterPlugin()
 {
 	mAdditionalPreferences = new NxtAdditionalPreferences(mBluetoothRealRobotModel.name());
 
-	auto modelEngine = new twoDModel::engine::TwoDModelEngineFacade(mTwoDRobotModel);
-
-	mTwoDRobotModel.setEngine(modelEngine->engine());
-	mTwoDModel.reset(modelEngine);
+	setTwoDModelEngineFacade(new twoDModel::engine::TwoDModelEngineFacade(mTwoDRobotModel));
 
 	connect(mAdditionalPreferences, &NxtAdditionalPreferences::settingsChanged
 			, &mUsbRealRobotModel, &robotModel::real::RealRobotModel::rereadSettings);
@@ -55,6 +51,12 @@ NxtKitInterpreterPlugin::~NxtKitInterpreterPlugin()
 	if (mOwnsBlocksFactory) {
 		delete mBlocksFactory;
 	}
+}
+
+void NxtKitInterpreterPlugin::setTwoDModelEngineFacade(twoDModel::engine::TwoDModelEngineFacade * modelEngine)
+{
+	mTwoDRobotModel.setEngine(modelEngine->engine());
+	mTwoDModel.reset(modelEngine);
 }
 
 void NxtKitInterpreterPlugin::init(const kitBase::KitPluginConfigurator &configurator)

@@ -1,4 +1,4 @@
-/* Copyright 2015 CyberTech Labs Ltd., Yurii Litvinov
+/* Copyright 2020 CyberTech Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,23 @@
 
 #pragma once
 
-#include <trikKitInterpreterCommon/trikKitInterpreterPluginBase.h>
+#include "twoDModel/engine/twoDModelEngineFacade.h"
 
-namespace trik {
+namespace twoDModel {
 
-class TrikV6KitInterpreterPlugin : public TrikKitInterpreterPluginBase
+/// Plugin interface for a kit support plugin.
+class KitTwoDPluginInterface
 {
-	Q_OBJECT
-	Q_PLUGIN_METADATA(IID "trik.TrikV6KitInterpreterPlugin")
-
+	Q_DISABLE_COPY(KitTwoDPluginInterface)
 public:
-	TrikV6KitInterpreterPlugin();
+	KitTwoDPluginInterface() = default;
 
-	QString kitId() const override;
-	QString friendlyKitName() const override;
-	int priority() const override;
+	virtual ~KitTwoDPluginInterface() = default;
+
+	virtual void setTwoDModelEngineFacade(twoDModel::engine::TwoDModelEngineFacade * modelEngine) = 0;
+
 };
 
 }
+
+Q_DECLARE_INTERFACE(twoDModel::KitTwoDPluginInterface, "ru.spbsu.math.QReal.KitTwoDPluginInterface/1")

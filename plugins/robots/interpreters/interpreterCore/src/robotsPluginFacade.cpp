@@ -423,6 +423,7 @@ void RobotsPluginFacade::initKitPlugins(const qReal::PluginConfigurator &configu
 	/// @todo: Check that this code works when different kit is selected
 	for (const QString &kitId : mKitPluginManager.kitIds()) {
 		for (kitBase::KitPluginInterface * const kit : mKitPluginManager.kitsById(kitId)) {
+			// IKHON if isInterpreter(kit) kit->setTwoDModelblabla(mTwoDSmth)
 			kit->init(kitBase::KitPluginConfigurator(configurer
 					, mRobotModelManager, *mParser, mEventsForKitPlugin, mProxyInterpreter));
 
