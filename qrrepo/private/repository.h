@@ -152,10 +152,11 @@ public:
 	/// Stores the meta-information for current stored binded to the given key.
 	void setMetaInformation(const QString &key, const QVariant &info);
 
+	/// Clear the meta-information.
+	void clearMetaInformation();
+
 	// IKHON TODO description
 	QHash<QString, QVariant> &files();
-//	void setFileContent(const QString &fileName, const QVariant &content);
-//	QVariant fileContent(const QVariant &fileName) const;
 
 private:
 	void init();

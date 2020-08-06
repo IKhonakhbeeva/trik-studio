@@ -159,6 +159,7 @@ void SubprogramsImporterExporterPlugin::importToProject() const
 	for (const auto &diagram : openedDiagrams) {
 		mMainWindowInterpretersInterface->activateItemOrDiagram(diagram);
 	}
+	mLogicalModel->mutableLogicalRepoApi().clearMetaInformation();
 	for (const auto &metaKey : oldMeta.keys()) {
 		mLogicalModel->mutableLogicalRepoApi().setMetaInformation(metaKey, oldMeta[metaKey]);
 	}
@@ -273,6 +274,7 @@ void SubprogramsImporterExporterPlugin::importFromCollectionTriggered() const
 		for (const auto &diagram : openedDiagrams) {
 			mMainWindowInterpretersInterface->activateItemOrDiagram(diagram);
 		}
+		mLogicalModel->mutableLogicalRepoApi().clearMetaInformation();
 		for (const auto &metaKey : oldMeta.keys()) {
 			mLogicalModel->mutableLogicalRepoApi().setMetaInformation(metaKey, oldMeta[metaKey]);
 		}

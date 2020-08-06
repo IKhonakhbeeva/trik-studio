@@ -173,6 +173,8 @@ public:
 	QStringList metaInformationKeys() const override;
 	QVariant metaInformation(const QString &key) const override;
 	void setMetaInformation(const QString &key, const QVariant &info) override;
+	void clearMetaInformation() override;
+
 	QHash<QString, QVariant> &files() const override;
 
 private:

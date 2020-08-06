@@ -75,8 +75,8 @@ TwoDModelWidget::TwoDModelWidget(Model &model, QWidget *parent)
 	, mUi(new Ui::TwoDModelWidget)
 	, mActions(new ActionsBox)
 	, mModel(model)
-	, mDisplay(new twoDModel::engine::NullTwoDModelDisplayWidget())
-	, mNullDisplay(new twoDModel::engine::NullTwoDModelDisplayWidget())
+	, mDisplay(new twoDModel::engine::NullTwoDModelDisplayWidget(this))
+	, mNullDisplay(new twoDModel::engine::NullTwoDModelDisplayWidget(this))
 	, mCurrentSpeed(defaultSpeedFactorIndex)
 {
 	setWindowIcon(QIcon(":/icons/2d-model.svg"));
@@ -180,7 +180,6 @@ void TwoDModelWidget::setRobotModel(twoDModel::model::RobotModel * robot)
 {
 	mCurrentRobot = robot;
 }
-
 
 void TwoDModelWidget::initWidget()
 {
@@ -538,8 +537,8 @@ void TwoDModelWidget::loadWorldModelWithoutRobot()
 	auto currentRobot = generateWorldModelXml().firstChildElement("root")
 			.firstChildElement("robots").firstChildElement("robot");
 
-	saveRobot.replaceChild(saveRobot.firstChildElement("sensors"), currentRobot.firstChildElement("sensors"));
-	saveRobot.replaceChild(saveRobot.firstChildElement("wheels"), currentRobot.firstChildElement("wheels"));
+	saveRobot.replaceChild(currentRobot.firstChildElement("sensors"), saveRobot.firstChildElement("sensors"));
+	saveRobot.replaceChild(currentRobot.firstChildElement("wheels"), saveRobot.firstChildElement("wheels"));
 	saveRobot.setAttribute("id", currentRobot.attribute("id"));
 
 	auto command = new commands::LoadWorldCommand(*this, save);

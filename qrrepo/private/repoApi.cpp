@@ -640,7 +640,12 @@ void RepoApi::setMetaInformation(const QString &key, const QVariant &info)
 	mRepository->setMetaInformation(key, info);
 }
 
+void RepoApi::clearMetaInformation()
+{
+	mRepository->clearMetaInformation();
+}
+
 QHash<QString, QVariant> &RepoApi::files() const
 {
-	mRepository->files();
+	return mRepository->files();
 }

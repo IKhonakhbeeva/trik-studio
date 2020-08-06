@@ -539,7 +539,8 @@ bool Repository::exterminate()
 
 void Repository::open(const QString &saveFile)
 {
-	init();
+	qDeleteAll(mObjects);
+	mObjects.clear();
 	mSerializer.setWorkingFile(saveFile);
 	mWorkingFile = saveFile;
 	loadFromDisk();
@@ -628,6 +629,11 @@ QVariant Repository::metaInformation(const QString &key) const
 void Repository::setMetaInformation(const QString &key, const QVariant &info)
 {
 	mMetaInfo[key] = info;
+}
+
+void Repository::clearMetaInformation()
+{
+	mMetaInfo.clear();
 }
 
 QHash<QString, QVariant> & Repository::files()

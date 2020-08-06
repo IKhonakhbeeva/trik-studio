@@ -135,7 +135,7 @@ $qRealDir/librobots-trik-kit-interpreter-common.so* \
 $qRealDir/librobots-kit-base.so* \
 $qRealDir/librobots-trik-kit.so* \
 $qRealDir/librobots-utils.so* \
-$qRealDir/libPythonQt*.so* \
+$qRealDir/libtrikPythonQt*.so* \
 $qRealDir/libBox2D.so* .
 
 rsync -av $qRealDir/libqextserialport.so* \
@@ -182,5 +182,7 @@ find . -type f -executable | xargs strip -sv || :
 # Packing
 popd
 
-rm -f trik_checker.tar.xz
-time { tar c trikStudio-checker | xz -z3ecvT 0 > trik_checker.tar.xz ; }
+if [[ -z "${TRIK_SKIP_CHECKER_ARCHIVE+x}" ]] ; then
+   rm -f trik_checker.tar.xz
+   time { tar c trikStudio-checker | xz -z3ecvT 0 > trik_checker.tar.xz ; }
+fi

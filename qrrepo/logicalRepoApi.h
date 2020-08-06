@@ -50,7 +50,9 @@ public:
 	/// Stores the meta-information for current stored binded to the given key.
 	virtual void setMetaInformation(const QString &key, const QVariant &info) = 0;
 
-	virtual QHash<QString, QVariant> & files() const = 0;
+	/// Clear the meta-information.
+	virtual void clearMetaInformation() = 0;
 
+	virtual QHash<QString, QVariant> & files() const = 0;
 };
 }
