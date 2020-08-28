@@ -85,6 +85,9 @@ public:
 	/// Categories of items include world model (walls, lines, etc.), sensors, robot position.
 	void setInteractivityFlags(kitBase::ReadOnlyFlags flags);
 
+	/// IKHON TODO
+	void setRobotModel(twoDModel::model::RobotModel * robot);
+
 public slots:
 	/// Sets a flag that next user mouse actions should draw a wall on the scene.
 	void addWall();
@@ -237,6 +240,7 @@ private:
 	DrawingAction mDrawingAction;
 
 	QMap<model::RobotModel *, RobotItem *> mRobots;
+	twoDModel::model::RobotModel * mCurrentRobot {};
 
 	/// Temporary wall that's being created. When it's complete, it's added to world model
 	items::WallItem *mCurrentWall = nullptr;

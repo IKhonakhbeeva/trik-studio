@@ -54,6 +54,7 @@ public:
 	void release() override;
 
 	void setTwoDModelEngineFacade(twoDModel::engine::TwoDModelEngineFacade * modelEngine) override;
+	twoDModel::robotModel::TwoDRobotModel & twoDRobotModel() override;
 
 	QList<kitBase::robotModel::RobotModelInterface *> robotModels() override;
 
@@ -105,6 +106,8 @@ private:
 
 	/// Handles all file workings  with camera imitation process
 	void handleImitationCameraWork();
+
+	void initTextualInterpreter();
 
 	QScopedPointer<twoDModel::TwoDModelControlInterface> mTwoDModel;
 	QScopedPointer<robotModel::TrikRobotModelBase> mRealRobotModel;

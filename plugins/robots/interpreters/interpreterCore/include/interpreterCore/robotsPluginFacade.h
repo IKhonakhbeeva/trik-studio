@@ -21,6 +21,7 @@
 #include <qrgui/plugins/toolPluginInterface/pluginConfigurator.h>
 #include <kitBase/eventsForKitPluginInterface.h>
 #include <kitBase/devicesConfigurationWidget.h>
+#include <twoDModel/engine/model/model.h>
 
 #include "interpreterCore/customizer.h"
 #include "interpreterCore/managers/kitPluginManager.h"
@@ -144,6 +145,7 @@ private:
 	qReal::gui::MainWindowInterpretersInterface *mMainWindow {};
 
 	QScopedPointer<interpreterCore::interpreter::details::SensorVariablesUpdater> mSensorVariablesUpdater;
+	QScopedPointer<twoDModel::model::Model> mModel;
 };
 
 }

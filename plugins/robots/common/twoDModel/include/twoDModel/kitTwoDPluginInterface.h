@@ -28,7 +28,7 @@ public:
 	virtual ~KitTwoDPluginInterface() = default;
 
 	virtual void setTwoDModelEngineFacade(twoDModel::engine::TwoDModelEngineFacade * modelEngine) = 0;
-
+	virtual robotModel::TwoDRobotModel & twoDRobotModel() = 0;
 };
 
 }

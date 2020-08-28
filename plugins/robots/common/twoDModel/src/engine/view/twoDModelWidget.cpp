@@ -154,12 +154,7 @@ TwoDModelWidget::TwoDModelWidget(Model &model, QWidget *parent)
 	mUi->robotWidthInCm->setButtonSymbols(QAbstractSpinBox::NoButtons);
 	mUi->robotMassInGr->setValue(robotMass);
 	mUi->robotMassInGr->setButtonSymbols(QAbstractSpinBox::NoButtons);
-
-	mConnections << connect(&mModel, &model::Model::robotAdded, [this](RobotModel *robotModel){
-		auto robotTrack = robotModel == nullptr || robotModel->info().wheelsPosition().size() < 2 ? robotWidth
-				: qAbs(robotModel->info().wheelsPosition()[0].y() - robotModel->info().wheelsPosition()[1].y());
-		mUi->robotTrackInCm->setValue(robotTrack / pixelsInCm);
-	});
+	mUi->robotTrackInCm->setValue(robotWidth / pixelsInCm);
 	mUi->robotTrackInCm->setValue(robotWidth / pixelsInCm);
 	mUi->robotTrackInCm->setButtonSymbols(QAbstractSpinBox::NoButtons);
 }
@@ -179,6 +174,10 @@ TwoDModelWidget::~TwoDModelWidget()
 void TwoDModelWidget::setRobotModel(twoDModel::model::RobotModel * robot)
 {
 	mCurrentRobot = robot;
+	mScene->setRobotModel(robot);
+	auto robotTrack = mCurrentRobot == nullptr || mCurrentRobot->info().wheelsPosition().size() < 2 ? robotWidth
+			: qAbs(mCurrentRobot->info().wheelsPosition()[0].y() - mCurrentRobot->info().wheelsPosition()[1].y());
+	mUi->robotTrackInCm->setValue(robotTrack / pixelsInCm);
 }
 
 void TwoDModelWidget::initWidget()
@@ -644,10 +643,8 @@ engine::TwoDModelDisplayWidget *TwoDModelWidget::display()
 
 void TwoDModelWidget::setSensorVisible(const kitBase::robotModel::PortInfo &port, bool isVisible)
 {
-	RobotModel *robotModel = mCurrentRobot;
-
-	if (mScene->robot(*robotModel)->sensors()[port]) {
-		mScene->robot(*robotModel)->sensors()[port]->setVisible(isVisible);
+	if (mScene->robot(*mCurrentRobot)->sensors()[port]) {
+		mScene->robot(*mCurrentRobot)->sensors()[port]->setVisible(isVisible);
 	}
 }
 
@@ -1059,7 +1056,11 @@ void TwoDModelWidget::updateWheelComboBoxes()
 void TwoDModelWidget::onRobotListChange(RobotItem *robotItem)
 {
 	if (mScene->oneRobot()) {
-		setSelectedRobotItem(mScene->robot(*mModel.robotModels()[0]));
+		if (mCurrentRobot) {
+			setSelectedRobotItem(mScene->robot(*mCurrentRobot));
+		} else {
+			setSelectedRobotItem(mScene->robot(*mModel.robotModels().last()));
+		}
 	} else {
 		if (mSelectedRobotItem) {
 			unsetSelectedRobotItem();

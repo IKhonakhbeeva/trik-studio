@@ -32,8 +32,6 @@ NxtKitInterpreterPlugin::NxtKitInterpreterPlugin()
 {
 	mAdditionalPreferences = new NxtAdditionalPreferences(mBluetoothRealRobotModel.name());
 
-	setTwoDModelEngineFacade(new twoDModel::engine::TwoDModelEngineFacade(mTwoDRobotModel));
-
 	connect(mAdditionalPreferences, &NxtAdditionalPreferences::settingsChanged
 			, &mUsbRealRobotModel, &robotModel::real::RealRobotModel::rereadSettings);
 	connect(mAdditionalPreferences, &NxtAdditionalPreferences::settingsChanged
@@ -123,6 +121,11 @@ QSharedPointer<kitBase::blocksBase::BlocksFactoryInterface> NxtKitInterpreterPlu
 kitBase::robotModel::RobotModelInterface *NxtKitInterpreterPlugin::defaultRobotModel()
 {
 	return &mTwoDRobotModel;
+}
+
+twoDModel::robotModel::TwoDRobotModel & NxtKitInterpreterPlugin::twoDRobotModel()
+{
+	return mTwoDRobotModel;
 }
 
 QList<kitBase::AdditionalPreferences *> NxtKitInterpreterPlugin::settingsWidgets()

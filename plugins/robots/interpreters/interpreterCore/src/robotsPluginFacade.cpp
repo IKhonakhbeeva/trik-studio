@@ -22,6 +22,7 @@
 #include <twoDModel/engine/twoDModelEngineInterface.h>
 #include <twoDModel/engine/twoDModelGuiFacade.h>
 #include <twoDModel/robotModel/twoDRobotModel.h>
+#include <twoDModel/kitTwoDPluginInterface.h>
 
 #include <qrgui/textEditor/qscintillaTextEdit.h>
 
@@ -40,7 +41,16 @@ RobotsPluginFacade::RobotsPluginFacade()
 	, mDockDevicesConfigurer(nullptr)
 	, mGraphicsWatcherManager(nullptr)
 	, mPaletteUpdateManager(nullptr)
+	, mModel(new twoDModel::model::Model())
 {
+	for (const auto &kitId : mKitPluginManager.kitIds()) {
+		for (auto kit : mKitPluginManager.kitsById(kitId)) {
+			if (auto twoDKit = dynamic_cast<twoDModel::KitTwoDPluginInterface*>(kit)) {
+				twoDKit->setTwoDModelEngineFacade(new twoDModel::engine::TwoDModelEngineFacade(*mModel, twoDKit->twoDRobotModel()));
+			}
+		}
+	}
+
 	connect(&mRobotModelManager, &RobotModelManager::robotModelChanged
 			, &mActionsManager, &ActionsManager::onRobotModelChanged);
 }
@@ -423,8 +433,7 @@ void RobotsPluginFacade::initKitPlugins(const qReal::PluginConfigurator &configu
 {
 	/// @todo: Check that this code works when different kit is selected
 	for (const QString &kitId : mKitPluginManager.kitIds()) {
-		for (kitBase::KitPluginInterface * const kit : mKitPluginManager.kitsById(kitId)) {
-			// IKHON if isInterpreter(kit) kit->setTwoDModelblabla(mTwoDSmth)
+		for (kitBase::KitPluginInterface * kit : mKitPluginManager.kitsById(kitId)) {
 			kit->init(kitBase::KitPluginConfigurator(configurer
 					, mRobotModelManager, *mParser, mEventsForKitPlugin, mProxyInterpreter));
 

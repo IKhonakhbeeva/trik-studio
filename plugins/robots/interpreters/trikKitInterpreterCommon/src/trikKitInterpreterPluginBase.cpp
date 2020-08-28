@@ -54,12 +54,11 @@ void TrikKitInterpreterPluginBase::initKitInterpreterPluginBase
 	mTwoDRobotModel.reset(twoDRobotModel);
 	mBlocksFactory = blocksFactory;
 
-	setTwoDModelEngineFacade(new twoDModel::engine::TwoDModelEngineFacade(*mTwoDRobotModel));
-
-	connectDevicesConfigurationProvider(devicesConfigurationProvider()); // ... =(
-
 	mAdditionalPreferences = new TrikAdditionalPreferences({ mRealRobotModel->name() });
+}
 
+void TrikKitInterpreterPluginBase::initTextualInterpreter()
+{
 	bool enablePython = false;
 	if (!friendlyKitName().contains("2014")) {
 		if (!qEnvironmentVariableIsEmpty("TRIK_PYTHONPATH")) {
@@ -242,6 +241,9 @@ TrikTextualInterpreter * TrikKitInterpreterPluginBase::textualInterpreter() cons
 
 void TrikKitInterpreterPluginBase::init(const kitBase::KitPluginConfigurator &configurer)
 {
+	connectDevicesConfigurationProvider(devicesConfigurationProvider()); // ... =(
+	initTextualInterpreter();
+
 	connect(&configurer.eventsForKitPlugin()
 			, &kitBase::EventsForKitPluginInterface::robotModelChanged
 			, [this](const QString &modelName) { mCurrentlySelectedModelName = modelName; });
@@ -425,6 +427,11 @@ QSharedPointer<kitBase::blocksBase::BlocksFactoryInterface> TrikKitInterpreterPl
 kitBase::robotModel::RobotModelInterface *TrikKitInterpreterPluginBase::defaultRobotModel()
 {
 	return mTwoDRobotModel.data();
+}
+
+twoDModel::robotModel::TwoDRobotModel & TrikKitInterpreterPluginBase::twoDRobotModel()
+{
+	return *mTwoDRobotModel.data();
 }
 
 QList<kitBase::AdditionalPreferences *> TrikKitInterpreterPluginBase::settingsWidgets()

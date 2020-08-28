@@ -24,17 +24,19 @@
 
 #include <qrgui/plugins/toolPluginInterface/usedInterfaces/errorReporterInterface.h>
 
+using namespace twoDModel;
 using namespace twoDModel::engine;
 
-TwoDModelEngineFacade::TwoDModelEngineFacade(twoDModel::robotModel::TwoDRobotModel &robotModel)
-	: mCurrentRobotModelName(robotModel.name())
-	, mModel(new model::Model())
+
+TwoDModelEngineFacade::TwoDModelEngineFacade(model::Model &model, robotModel::TwoDRobotModel &robotModel)
+	: mModel(&model)
 	, mView(new view::TwoDModelWidget(*mModel, nullptr)) // parent widget is set in the `init` method later
 	, mApi(new TwoDModelEngineApi(*mModel, *mView))
 	, mDock(new utils::SmartDock("2dModelDock", mView.data()))
+	, mRobotModelName(robotModel.name())
 {
-	mModel.data()->addRobotModel(robotModel);
-	mApi->setRobotModel(mModel->robotModels()[0]);
+	mModel->addRobotModel(robotModel);
+	mApi->setRobotModel(mModel->robotModels().last());
 	connect(mView.data(), &view::TwoDModelWidget::runButtonPressed, this, &TwoDModelEngineFacade::runButtonPressed);
 	connect(mView.data(), &view::TwoDModelWidget::stopButtonPressed, this, &TwoDModelEngineFacade::stopButtonPressed);
 	connect(mView.data(), &view::TwoDModelWidget::widgetClosed, this, &TwoDModelEngineFacade::stopButtonPressed);
@@ -44,13 +46,13 @@ TwoDModelEngineFacade::TwoDModelEngineFacade(twoDModel::robotModel::TwoDRobotMod
 TwoDModelEngineFacade::~TwoDModelEngineFacade() {}
 
 void TwoDModelEngineFacade::init(const kitBase::EventsForKitPluginInterface &eventsForKitPlugin,
-								 const qReal::SystemEvents &systemEvents,
-								 qReal::LogicalModelAssistInterface &logicalModel,
-								 qReal::ControllerInterface &controller,
-								 qReal::gui::MainWindowInterpretersInterface &interpretersInterface,
-								 qReal::gui::MainWindowDockInterface &dockInterface,
-								 const qReal::ProjectManagementInterface &projectManager,
-								 kitBase::InterpreterControlInterface &interpreterControl)
+		const qReal::SystemEvents &systemEvents,
+		qReal::LogicalModelAssistInterface &logicalModel,
+		qReal::ControllerInterface &controller,
+		qReal::gui::MainWindowInterpretersInterface &interpretersInterface,
+		qReal::gui::MainWindowDockInterface &dockInterface,
+		const qReal::ProjectManagementInterface &projectManager,
+		kitBase::InterpreterControlInterface &interpreterControl)
 {
 	mModel->init(*interpretersInterface.errorReporter(), interpreterControl);
 	dockInterface.registerEditor(*mView);
@@ -144,11 +146,11 @@ void TwoDModelEngineFacade::init(const kitBase::EventsForKitPluginInterface &eve
 	connect(&projectManager, &qReal::ProjectManagementInterface::closed, this, reloadWorld);
 	connect(&systemEvents, &qReal::SystemEvents::activeTabChanged, this, onActiveTabChanged);
 
-	connect(mModel.data(), &model::Model::modelChanged, this, [&logicalModel](const QDomDocument &xml) {
+	connect(mModel, &model::Model::modelChanged, this, [&logicalModel](const QDomDocument &xml) {
 		logicalModel.mutableLogicalRepoApi().files()["worldModel.xml"] = xml.toString(4);
 	});
 
-	connect(mModel.data(), &model::Model::blobsChanged, this, [&logicalModel](const QDomDocument &xml) {
+	connect(mModel, &model::Model::blobsChanged, this, [&logicalModel](const QDomDocument &xml) {
 		logicalModel.mutableLogicalRepoApi().files()["blobs.xml"] = xml.toString(4);
 	});
 
@@ -156,7 +158,7 @@ void TwoDModelEngineFacade::init(const kitBase::EventsForKitPluginInterface &eve
 			&kitBase::EventsForKitPluginInterface::robotModelChanged,
 			this,
 			[this, connectTwoDModel, disconnectTwoDModel](const QString &modelName) {
-				if (modelName == mCurrentRobotModelName) {
+				if (modelName == mRobotModelName) {
 					connectTwoDModel();
 					mDock->attachToMainWindow(Qt::TopDockWidgetArea);
 				} else {

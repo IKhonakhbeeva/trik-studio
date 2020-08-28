@@ -26,6 +26,7 @@ QT += widgets
 includes(plugins/robots/interpreters/interpreterCore \
 		plugins/robots/common/kitBase \
 		plugins/robots/utils \
+		plugins/robots/common/twoDModel \
 		qrtext \
 )
 

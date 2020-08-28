@@ -26,7 +26,7 @@
 #include <kitBase/devicesConfigurationProvider.h>
 
 #include "twoDModel/engine/twoDModelDisplayWidget.h"
-
+#include "twoDModel/robotModel/twoDRobotModel.h"
 #include "twoDModel/twoDModelDeclSpec.h"
 
 class QComboBox;
@@ -241,7 +241,7 @@ private:
 	ImageItemPopup *mImageItemPopup {};  // Takes ownership
 	RobotItemPopup *mRobotItemPopup {};  // Takes ownership
 	SpeedPopup *mSpeedPopup {};  // Takes owneship
-	twoDModel::model::RobotModel * mCurrentRobot;
+	twoDModel::model::RobotModel * mCurrentRobot {};
 
 	RobotItem *mSelectedRobotItem {};
 	kitBase::DevicesConfigurationWidget *mCurrentConfigurer {};

@@ -32,8 +32,6 @@ Ev3KitInterpreterPlugin::Ev3KitInterpreterPlugin()
 {
 	mAdditionalPreferences = new Ev3AdditionalPreferences;
 
-	setTwoDModelEngineFacade(new twoDModel::engine::TwoDModelEngineFacade(mTwoDRobotModel));
-
 	connect(mAdditionalPreferences, &Ev3AdditionalPreferences::settingsChanged
 			, &mUsbRealRobotModel, &robotModel::real::RealRobotModel::rereadSettings);
 	connect(mAdditionalPreferences, &Ev3AdditionalPreferences::settingsChanged
@@ -127,6 +125,11 @@ QSharedPointer<kitBase::blocksBase::BlocksFactoryInterface> Ev3KitInterpreterPlu
 kitBase::robotModel::RobotModelInterface *Ev3KitInterpreterPlugin::defaultRobotModel()
 {
 	return &mTwoDRobotModel;
+}
+
+twoDModel::robotModel::TwoDRobotModel & Ev3KitInterpreterPlugin::twoDRobotModel()
+{
+	return mTwoDRobotModel;
 }
 
 QList<kitBase::AdditionalPreferences *> Ev3KitInterpreterPlugin::settingsWidgets()

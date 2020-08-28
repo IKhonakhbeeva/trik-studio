@@ -44,8 +44,7 @@ class TWO_D_MODEL_EXPORT TwoDModelEngineFacade : public TwoDModelControlInterfac
 	Q_OBJECT
 
 public:
-	/// @param configurer - allows to configure various model parameters specific to a kit. Takes ownership.
-	explicit TwoDModelEngineFacade(twoDModel::robotModel::TwoDRobotModel &robotModel);
+	explicit TwoDModelEngineFacade(twoDModel::model::Model &model, robotModel::TwoDRobotModel &robotModel);
 
 	~TwoDModelEngineFacade() override;
 
@@ -69,13 +68,12 @@ public slots:
 private:
 	void loadReadOnlyFlags(const qReal::LogicalModelAssistInterface &logicalModel);
 
-	const QString mCurrentRobotModelName;
-
-	QScopedPointer<model::Model> mModel;
+	model::Model* mModel; // No ownership
 	QScopedPointer<view::TwoDModelWidget> mView;
 	QScopedPointer<TwoDModelEngineInterface> mApi;
 	utils::SmartDock *mDock;  // Transfers ownership to main window indirectly
 
+	const QString mRobotModelName;
 	qReal::TabInfo::TabType mCurrentTabInfo { qReal::TabInfo::TabType::other }; // temp hack
 };
 

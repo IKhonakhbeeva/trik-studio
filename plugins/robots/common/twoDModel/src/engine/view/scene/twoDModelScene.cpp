@@ -182,8 +182,18 @@ bool TwoDModelScene::isCorrectScene(const QList<QGraphicsItem *> &checkItems) co
 	return true;
 }
 
+void TwoDModelScene::setRobotModel(twoDModel::model::RobotModel * robot)
+{
+	// Some hack to use onRobotAdd again after setting robotModel
+	mCurrentRobot = robot;
+	onRobotAdd(mCurrentRobot);
+}
+
+
 void TwoDModelScene::onRobotAdd(model::RobotModel *robotModel)
 {
+	if (!mCurrentRobot || mCurrentRobot->info().kitId() != robotModel->info().kitId()) return;
+
 	RobotItem * const robotItem = new RobotItem(robotModel->info().robotImage(), *robotModel);
 
 	connect(robotItem, &RobotItem::mousePressed, this, &TwoDModelScene::robotPressed);
