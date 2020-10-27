@@ -325,6 +325,15 @@ defineTest(links) {
 	export(LIBS)
 }
 
+defineTest(addTranslation) {
+	LANGUAGES = ru fr
+	INPUT = $$1
+	for(LANG, LANGUAGES) {
+		TRANSLATIONS += $$GLOBAL_PWD/qrtranslations/$$LANG/$${INPUT}_$${LANG}.ts
+	}
+	export(TRANSLATIONS)
+}
+
 defineTest(noPch) {
 	CONFIG -= precompile_header
 	PRECOMPILED_HEADER =
