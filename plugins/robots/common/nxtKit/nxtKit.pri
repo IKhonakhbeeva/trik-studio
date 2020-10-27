@@ -76,6 +76,4 @@ SOURCES += \
 	$$PWD/src/communication/i2cCommunicator.cpp \
 	$$PWD/src/communication/nxtUsbDriverInstaller.cpp \
 
-TRANSLATIONS = \
-	$$PWD/../../../../qrtranslations/ru/plugins/robots/nxtKit_ru.ts \
-	$$PWD/../../../../qrtranslations/fr/plugins/robots/nxtKit_fr.ts \
+addTranslation(plugins/robots/nxtKit)

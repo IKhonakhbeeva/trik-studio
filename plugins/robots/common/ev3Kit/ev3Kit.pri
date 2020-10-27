@@ -103,6 +103,4 @@ SOURCES += \
 	$$PWD/src/communication/hidapi.c \
 	$$PWD/src/communication/usbRobotCommunicationThread.cpp \
 
-TRANSLATIONS = \
-	$$PWD/../../../../qrtranslations/ru/plugins/robots/ev3Kit_ru.ts \
-	$$PWD/../../../../qrtranslations/fr/plugins/robots/ev3Kit_fr.ts \
+addTranslation(plugins/robots/ev3Kit)

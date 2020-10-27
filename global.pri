@@ -326,7 +326,7 @@ defineTest(links) {
 }
 
 defineTest(addTranslation) {
-	LANGUAGES = ru fr
+	LANGUAGES = ru fr de
 	INPUT = $$1
 	for(LANG, LANGUAGES) {
 		TRANSLATIONS += $$GLOBAL_PWD/qrtranslations/$$LANG/$${INPUT}_$${LANG}.ts

@@ -26,6 +26,4 @@ links(qrkernel qrutils qrtext qrgui-preferences-dialog qrgui-tool-plugin-interfa
 SOURCES += $$files(*.cpp, true)
 HEADERS += $$files(*.h, true)
 
-TRANSLATIONS += \
-	$$PWD/../../../../qrtranslations/ru/plugins/robots/pioneerKit_ru.ts \
-	$$PWD/../../../../qrtranslations/fr/plugins/robots/pioneerKit_fr.ts \
+addTranslation(plugins/robots/pioneerKit)

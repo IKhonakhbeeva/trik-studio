@@ -31,9 +31,7 @@ links(qrkernel qrutils qrgui-tool-plugin-interface qrgui-preferences-dialog qrgu
 		robots-utils robots-kit-base robots-interpreter-core robots-2d-model \
 )
 
-TRANSLATIONS = \
-	$$PWD/../../../../qrtranslations/ru/plugins/robots/twoDModelRunner_ru.ts \
-	$$PWD/../../../../qrtranslations/fr/plugins/robots/twoDModelRunner_fr.ts \
+addTranslation(plugins/robots/twoDModelRunner)
 
 HEADERS += \
 	$$PWD/runner.h \

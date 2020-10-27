@@ -24,9 +24,7 @@ links(qrkernel qrutils qrrepo qrtext qrgui-tool-plugin-interface qrgui-text-edit
 
 DEFINES += ROBOTS_GENERATOR_LIBRARY
 
-TRANSLATIONS = \
-	$$PWD/../../../../qrtranslations/ru/plugins/robots/generatorBase_ru.ts \
-	$$PWD/../../../../qrtranslations/fr/plugins/robots/generatorBase_fr.ts \
+addTranslation(plugins/robots/generatorBase)
 
 HEADERS += \
 	$$PWD/include/generatorBase/robotsGeneratorDeclSpec.h \

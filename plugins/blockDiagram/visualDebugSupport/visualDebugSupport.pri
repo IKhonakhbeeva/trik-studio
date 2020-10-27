@@ -21,7 +21,7 @@ INCLUDEPATH += \
 
 links(qrkernel qrutils qrgui-preferences-dialog qrgui-tool-plugin-interface)
 
-TRANSLATIONS = $$PWD/../../../qrtranslations/ru/plugins/visualDebugSupport_ru.ts
+addTranslation(plugins/visualDebugSupport)
 
 HEADERS += \
 	$$PWD/visualDebuggerPlugin.h \

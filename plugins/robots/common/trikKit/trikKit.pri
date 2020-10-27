@@ -138,6 +138,4 @@ SOURCES += \
 	$$PWD/src/blocks/details/trikWaitForGyroscopeBlock.cpp \
 	$$PWD/src/blocks/details/trikPrintTextBlock.cpp \
 
-TRANSLATIONS += \
-	$$PWD/../../../../qrtranslations/ru/plugins/robots/trikKit_ru.ts \
-	$$PWD/../../../../qrtranslations/fr/plugins/robots/trikKit_fr.ts \
+addTranslation(plugins/robots/trikKit)

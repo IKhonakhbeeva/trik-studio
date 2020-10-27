@@ -19,9 +19,7 @@ includes(qrtext plugins/robots/utils)
 
 DEFINES += ROBOTS_KIT_BASE_LIBRARY
 
-TRANSLATIONS = \
-	$$PWD/../../../../qrtranslations/ru/plugins/robots/kitBase_ru.ts \
-	$$PWD/../../../../qrtranslations/fr/plugins/robots/kitBase_fr.ts \
+addTranslation(plugins/robots/kitBase)
 
 HEADERS += \
 	$$PWD/include/kitBase/kitBaseDeclSpec.h \
