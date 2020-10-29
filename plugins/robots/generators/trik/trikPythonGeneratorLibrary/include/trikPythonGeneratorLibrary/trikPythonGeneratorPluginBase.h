@@ -107,6 +107,7 @@ private:
 	trik::robotModel::TrikRobotModelBase &mRobotModel;
 
 	QStringList mPathsToTemplates;
+	QList<QFileInfo> mLastUploaded;
 
 	/// Protocol that is used to upload program to robot.
 	QScopedPointer<utils::robotCommunication::UploadProgramProtocol> mUploadProgramProtocol;

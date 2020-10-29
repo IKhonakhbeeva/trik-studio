@@ -30,7 +30,8 @@
 #include <utils/robotCommunication/uploadProgramProtocol.h>
 #include <utils/robotCommunication/networkCommunicationErrorReporter.h>
 #include <qrgui/textEditor/qscintillaTextEdit.h>
-
+#include <qrkernel/settingsManager.h>
+#include <qrutils/widgets/qRealMessageBox.h>
 #include "trikQtsMasterGenerator.h"
 #include "emptyShell.h"
 
@@ -90,6 +91,33 @@ void TrikQtsGeneratorPluginBase::init(const kitBase::KitPluginConfigurator &conf
 			, this, &TrikQtsGeneratorPluginBase::onProtocolFinished);
 	connect(mStopRobotProtocol.data(), &StopRobotProtocol::success
 			, this, &TrikQtsGeneratorPluginBase::onProtocolFinished);
+
+	connect(mUploadProgramProtocol.data(), &UploadProgramProtocol::success, this, [this](){
+			if (mRunProgramProtocol) {
+				const RunPolicy runPolicy = static_cast<RunPolicy>(SettingsManager::value("trikRunPolicy").toInt());
+				switch (runPolicy) {
+				case RunPolicy::Ask:
+					if (utils::QRealMessageBox::question(mMainWindowInterface->windowWidget(), tr("The program has been uploaded")
+							, tr("Do you want to run it?")) != QMessageBox::Yes) {
+						break;
+					}
+					[[clang::fallthrough]];
+				case RunPolicy::AlwaysRun:
+					if (mLastUploaded.size() == 1) {
+						mRunProgramProtocol->run(mLastUploaded[0]);
+					} else {
+						utils::QRealMessageBox::question(
+										mMainWindowInterface->windowWidget()
+										, tr("Sorry")
+										, tr("You upload multiple files, I cannot choose which one to run")
+										, QMessageBox::StandardButtons(QMessageBox::Ok));
+					}
+					break;
+				case RunPolicy::NeverRun:
+					break;
+				}
+			}
+	});
 
 	connect(mRunProgramProtocol.data(), &RunProgramProtocol::configVersionMismatch
 			, this, [errorReporter](const QString &expected, const QString &actual) {
@@ -194,12 +222,13 @@ void TrikQtsGeneratorPluginBase::addShellDevice(robotModel::GeneratorModelExtens
 void TrikQtsGeneratorPluginBase::uploadProgram()
 {
 	if (mUploadProgramProtocol) {
-		if (mMainWindowInterface->activeDiagram() != Id())
+		if (!mMainWindowInterface->activeDiagram().isNull())
 		{
 			const QFileInfo fileInfo = generateCodeForProcessing();
 			if (fileInfo != QFileInfo() && !fileInfo.absoluteFilePath().isEmpty()) {
 				disableButtons();
-				mUploadProgramProtocol->run({fileInfo});
+				mLastUploaded = {fileInfo};
+				mUploadProgramProtocol->run(mLastUploaded);
 			}
 		} else {
 			QList<QFileInfo> files;
@@ -214,7 +243,8 @@ void TrikQtsGeneratorPluginBase::uploadProgram()
 			}
 			if (!files.isEmpty()) {
 				disableButtons();
-				mUploadProgramProtocol->run(files);
+				mLastUploaded = files;
+				mUploadProgramProtocol->run(mLastUploaded);
 			} else {
 				mMainWindowInterface->errorReporter()->addError(
 						tr("There are no files to upload. You must open or generate at least one *.js or *.py file."));
