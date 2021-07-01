@@ -46,7 +46,7 @@ public:
 	~SmartDock() override = default;
 
 	/// Returns true if this widget is currently replacing main window central area.
-	bool isCentral() const;
+	bool isCentral();
 
 	/// Hides close button leaving dock widget closable.
 	static void hideCloseButton(QDockWidget *dock);

@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>customDefaultSettings.ini</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Custom Executor Support</DisplayName>
+    <DisplayName xml:lang="ru_ru">Поддержка кастомного исполнителя</DisplayName>
+    <Description>Packages for working with Custom Executor in TRIK Studio</Description>
+    <Description xml:lang="ru_ru">Пакеты для работы с кастомным исполнителем</Description>
+    <Version></Version>
+    <ReleaseDate>2021-07-02</ReleaseDate>
+    <SortingPriority>11</SortingPriority>
+    <ForcedInstallation>false</ForcedInstallation>
+</Package>

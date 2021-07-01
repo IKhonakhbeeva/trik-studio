@@ -40,11 +40,11 @@ SmartDock::SmartDock(const QString &objectName, QWidget *innerWidget, QMainWindo
 	initDialog();
 }
 
-bool SmartDock::isCentral() const
+bool SmartDock::isCentral()
 {
 	return !isFloating() && isVisible()
 			// I know that const_cast is bad, but this is beacuse of bad qt design.
-			&& mMainWindow->dockWidgetArea(const_cast<SmartDock *>(this)) == Qt::TopDockWidgetArea;
+			&& mMainWindow->dockWidgetArea(this) == Qt::TopDockWidgetArea;
 }
 
 void SmartDock::hideCloseButton(QDockWidget *dock)
@@ -144,7 +144,7 @@ void SmartDock::checkFloating()
 
 void SmartDock::checkCentralWidget()
 {
-	const bool tabsVisible = isFloating() || !isVisible() || mMainWindow->dockWidgetArea(this) != Qt::TopDockWidgetArea;
+	const bool tabsVisible = !isCentral();
 	for (QTabWidget * const centralWidget : mMainWindow->centralWidget()->findChildren<QTabWidget *>()) {
 		centralWidget->setVisible(tabsVisible);
 		qReal::EditorInterface *editor = tabsVisible
