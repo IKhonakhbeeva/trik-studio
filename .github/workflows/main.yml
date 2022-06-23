@@ -139,6 +139,7 @@ jobs:
              python3 --version
              which g++
              g++ --version
+             test ! -d "${IQTA_TOOLS}/QtInstallerFramework" && echo "Need QT IFW" && exit 1
 
       - name: QMake
         timeout-minutes: 1
