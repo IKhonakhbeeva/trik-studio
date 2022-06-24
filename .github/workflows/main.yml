@@ -107,7 +107,7 @@ jobs:
           extra: '--external 7z'
 
       - name: Check Qt IFW
-        run : test ! -d "${IQTA_TOOLS}/QtInstallerFramework" && echo "Update QT IFW version to" && aqt list-tool windows desktop tools_ifw && exit 1
+        run : aqt list-tool windows desktop tools_ifw
 
 # After Qt install action, that spoils pythonLocation variable
       - name: Set up Python ${{matrix.python-version}}
