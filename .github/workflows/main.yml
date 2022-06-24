@@ -88,9 +88,7 @@ jobs:
             echo "BUILD_DIR=$DIR" >> $GITHUB_ENV
 
       - name: Create build directory
-        run: |
-            mkdir -vp ${{ env.BUILD_DIR }}
-            test ! -d "${{ env.BUILD_DIR }}" && echo "No exist" || echo "Exist"
+        run: mkdir -vp ${{ env.BUILD_DIR }}
 
       - name: Configure git
         shell: bash
@@ -113,6 +111,7 @@ jobs:
         run : |
             ls ${IQTA_TOOLS}
             ls ${IQTA_TOOLS}/QtInstallerFramework
+            test ! -d "${IQTA_TOOLS}/QtInstallerFramework" && echo "No exist" || echo "Exist"
             test ! -d "${IQTA_TOOLS}/QtInstallerFramework" && aqt list-tool windows desktop tools_ifw
 
 # After Qt install action, that spoils pythonLocation variable
