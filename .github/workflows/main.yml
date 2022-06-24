@@ -107,12 +107,11 @@ jobs:
           extra: '--external 7z'
 
       - name: Check Qt IFW
-        shell: bash
         run : |
             ls ${IQTA_TOOLS}
             ls ${IQTA_TOOLS}/QtInstallerFramework
             test ! -d "${IQTA_TOOLS}/QtInstallerFramework" && echo "No exist" || echo "Exist"
-            test ! -d "${IQTA_TOOLS}/QtInstallerFramework" && aqt list-tool windows desktop tools_ifw
+            test ! -d "${IQTA_TOOLS}/QtInstallerFramework" && aqt list-tool windows desktop tools_ifw || echo "IFW is okey"
 
 # After Qt install action, that spoils pythonLocation variable
       - name: Set up Python ${{matrix.python-version}}
