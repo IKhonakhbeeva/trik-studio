@@ -103,11 +103,11 @@ jobs:
           version: ${{matrix.qt-version}}
           arch: win32_mingw${{matrix.mingw-short-version}}
           modules: 'qtscript'
-          tools: 'tools_ifw,4.3.0 tools_mingw,${{matrix.mingw-version}}.0,qt.tools.win32_mingw${{matrix.mingw-short-version}}0'
+          tools: 'tools_ifw,4.4.0,qt.tools.ifw.44 tools_mingw,${{matrix.mingw-version}}.0,qt.tools.win32_mingw${{matrix.mingw-short-version}}0'
           extra: '--external 7z'
 
       - name: Check Qt IFW
-        run : test ! -d "${IQTA_TOOLS}/QtInstallerFramework" && echo "Need QT IFW to ${{matrix.qt-version}}" && aqt list-tool windows desktop tools_ifw && exit 1
+        run : test ! -d "${IQTA_TOOLS}/QtInstallerFramework" && echo "Update QT IFW version to" && aqt list-tool windows desktop tools_ifw && exit 1
 
 # After Qt install action, that spoils pythonLocation variable
       - name: Set up Python ${{matrix.python-version}}
@@ -142,7 +142,6 @@ jobs:
              python3 --version
              which g++
              g++ --version
-             python -m aqt list windows desktop
 
       - name: QMake
         timeout-minutes: 1
