@@ -97,7 +97,7 @@ jobs:
             git config --global core.autocrlf true
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
           dir: C:\
           version: ${{matrix.qt-version}}
@@ -107,7 +107,7 @@ jobs:
           extra: '--external 7z'
 
       - name: Check Qt IFW
-        run : test ! -d "${IQTA_TOOLS}/QtInstallerFramework" && echo "Need QT IFW to ${{matrix.qt-version}}" && aqt list ${{matrix.qt-version}} windows desktop tools_ifw && exit 1
+        run : test ! -d "${IQTA_TOOLS}/QtInstallerFramework" && echo "Need QT IFW to ${{matrix.qt-version}}" && aqt list-tool ${{matrix.qt-version}} windows desktop tools_ifw && exit 1
 
 # After Qt install action, that spoils pythonLocation variable
       - name: Set up Python ${{matrix.python-version}}
