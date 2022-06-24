@@ -103,15 +103,11 @@ jobs:
           version: ${{matrix.qt-version}}
           arch: win32_mingw${{matrix.mingw-short-version}}
           modules: 'qtscript'
-          tools: 'tools_ifw,4.4.0,qt.tools.ifw.44 tools_mingw,${{matrix.mingw-version}}.0,qt.tools.win32_mingw${{matrix.mingw-short-version}}0'
+          tools: 'tools_ifw,4.3.0,qt.tools.ifw.43 tools_mingw,${{matrix.mingw-version}}.0,qt.tools.win32_mingw${{matrix.mingw-short-version}}0'
           extra: '--external 7z'
 
       - name: Check Qt IFW
-        run : |
-            ls ${IQTA_TOOLS}
-            ls ${IQTA_TOOLS}/QtInstallerFramework
-            test ! -d "${IQTA_TOOLS}/QtInstallerFramework" && echo "No exist" || echo "Exist"
-            test ! -d "${IQTA_TOOLS}/QtInstallerFramework" && aqt list-tool windows desktop tools_ifw || echo "IFW is okey"
+        run : test ! -d "${IQTA_TOOLS}/QtInstallerFramework" && echo "Use QT IFW version:" && aqt list-tool windows desktop tools_ifw || echo "QT IFW is okey"
 
 # After Qt install action, that spoils pythonLocation variable
       - name: Set up Python ${{matrix.python-version}}
