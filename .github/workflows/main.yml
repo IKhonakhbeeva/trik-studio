@@ -107,6 +107,7 @@ jobs:
           extra: '--external 7z'
 
       - name: Check Qt IFW
+        shell: bash
         run : |
             ls ${IQTA_TOOLS}
             ls ${IQTA_TOOLS}/QtInstallerFramework
